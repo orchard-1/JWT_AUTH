@@ -1,0 +1,53 @@
+# REST API Testing - JWT Auth Server
+# Use with REST Client VS Code extension or Postman
+
+@baseUrl = http://localhost:5000/api/auth
+@accessToken = 
+@refreshToken = 
+
+### Health Check
+GET http://localhost:5000/health
+
+### 1. Register a new user
+POST @baseUrl/register
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "TestPassword123!",
+  "name": "Test User"
+}
+
+### 2. Login
+POST @baseUrl/login
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "TestPassword123!"
+}
+
+### 3. Get current user (requires valid access token)
+GET @baseUrl/me
+Authorization: Bearer @accessToken
+
+### 4. Refresh access token
+POST @baseUrl/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "@refreshToken"
+}
+
+### 5. Logout (revoke refresh token)
+POST @baseUrl/logout
+Authorization: Bearer @accessToken
+Content-Type: application/json
+
+{
+  "refreshToken": "@refreshToken"
+}
+
+### 6. Admin endpoint (requires ADMIN role)
+GET http://localhost:5000/api/auth/admin/users
+Authorization: Bearer @accessToken
